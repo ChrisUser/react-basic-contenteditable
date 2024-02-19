@@ -7,7 +7,7 @@ interface ContentEditableProps {
 
 const ContentEditable: React.FC<ContentEditableProps> = ({
   placeholder,
-  // emitContent,
+  onChange,
 }) => {
   const [content, setContent] = useState("")
   const divRef = useRef<HTMLDivElement | null>(null)
@@ -16,8 +16,9 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
     if (divRef.current) {
       divRef.current.style.height = "auto"
       // divRef.current.style.height = divRef.current.scrollHeight + "px"
+      onChange(content)
     }
-  }, [content])
+  }, [content, onChange])
 
   /**
    * Check if the caret is on the last line of an element
