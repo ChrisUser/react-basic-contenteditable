@@ -1,5 +1,5 @@
+import ContentEditable from "../lib/ContentEditable"
 import "./App.css"
-import ContentEditable from "../lib/components/contenteditable"
 import { useState } from "react"
 
 function App() {

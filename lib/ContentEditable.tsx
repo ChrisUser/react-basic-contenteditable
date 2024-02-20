@@ -1,13 +1,29 @@
 import React, { useState, useEffect, useRef, useCallback } from "react"
 
 interface ContentEditableProps {
+  containerClassName?: string
+  contentEditableClassName?: string
+  placeholderClassName?: string
   placeholder?: string
+  disabled?: boolean
   onChange: (content: string) => void
+  onKeyUp?: (e: React.KeyboardEvent) => void
+  onKeyDown?: (e: React.KeyboardEvent) => void
+  onFocus?: (e: React.FocusEvent) => void
+  onBlur?: (e: React.FocusEvent) => void
 }
 
 const ContentEditable: React.FC<ContentEditableProps> = ({
+  containerClassName,
+  contentEditableClassName,
+  placeholderClassName,
   placeholder,
+  disabled,
   onChange,
+  onKeyUp,
+  onKeyDown,
+  onFocus,
+  onBlur,
 }) => {
   const [content, setContent] = useState("")
   const divRef = useRef<HTMLDivElement | null>(null)
@@ -189,6 +205,7 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
+    if (onKeyDown) onKeyDown(e)
     if ((e.key === "Delete" || e.key === "Backspace") && isAllTextSelected()) {
       console.log("delete all", isAllTextSelected())
       e.preventDefault()
@@ -219,6 +236,7 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
 
   return (
     <div
+      className={containerClassName}
       style={{
         display: "flex",
         justifyContent: "flex-start",
@@ -231,9 +249,11 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
         ref={divRef}
         contentEditable
         defaultValue={content}
+        aria-disabled={disabled}
         dir="auto"
         role="textbox"
         aria-label={placeholder ?? ""}
+        className={contentEditableClassName}
         style={{
           width: "100%",
           border: "1px solid #ccc",
@@ -248,15 +268,33 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
           wordBreak: "break-word",
           unicodeBidi: "plaintext",
         }}
-        onInput={(e: React.FormEvent<HTMLDivElement>) =>
+        onInput={(e: React.FormEvent<HTMLDivElement>) => {
+          if (disabled) return
           setContent(e.currentTarget.innerText)
-        }
-        onPaste={(e) => handlePasteEvent(e)}
-        onKeyDown={handleKeyDown}
+        }}
+        onPaste={(e) => {
+          if (disabled) return
+          handlePasteEvent(e)
+        }}
+        onFocus={(e) => {
+          if (onFocus) onFocus(e)
+        }}
+        onBlur={(e) => {
+          if (onBlur) onBlur(e)
+        }}
+        onKeyUp={(e) => {
+          if (disabled) return
+          if (onKeyUp) onKeyUp(e)
+        }}
+        onKeyDown={(e) => {
+          if (disabled) return
+          handleKeyDown(e)
+        }}
       />
       {!content && (
         <span
           dir="auto"
+          className={placeholderClassName}
           style={{
             position: "absolute",
             color: "#a2acb4",
