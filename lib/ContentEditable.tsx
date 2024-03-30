@@ -6,11 +6,13 @@ interface ContentEditableProps {
   placeholderClassName?: string
   placeholder?: string
   disabled?: boolean
+  updatedContent?: string
   onChange: (content: string) => void
   onKeyUp?: (e: React.KeyboardEvent) => void
   onKeyDown?: (e: React.KeyboardEvent) => void
   onFocus?: (e: React.FocusEvent) => void
   onBlur?: (e: React.FocusEvent) => void
+  onContentExternalUpdate?: (content: string) => void
 }
 
 const ContentEditable: React.FC<ContentEditableProps> = ({
@@ -19,26 +21,35 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
   placeholderClassName,
   placeholder,
   disabled,
+  updatedContent,
   onChange,
   onKeyUp,
   onKeyDown,
   onFocus,
   onBlur,
+  onContentExternalUpdate,
 }) => {
   const [content, setContent] = useState("")
   const divRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
+    if (updatedContent) {
+      setContent(updatedContent)
+      if (onContentExternalUpdate) onContentExternalUpdate(updatedContent)
+    }
+  }, [updatedContent, onContentExternalUpdate])
+
+  useEffect(() => {
     if (divRef.current) {
       divRef.current.style.height = "auto"
-      // divRef.current.style.height = divRef.current.scrollHeight + "px"
       onChange(content)
     }
   }, [content, onChange])
 
   /**
-   * Check if the caret is on the last line of an element
-   * Returns `false` when the caret is part of a selection
+   * Checks if the caret is on the last line of a contenteditable element
+   * @param element - The HTMLDivElement to check
+   * @returns A boolean indicating whether the caret is on the last line or `false` when the caret is part of a selection
    */
   const isCaretOnLastLine = useCallback((element: HTMLDivElement): boolean => {
     if (element.ownerDocument.activeElement !== element) return false
@@ -82,6 +93,10 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
     return originalCaretRect.bottom === endOfElementRect.bottom
   }, [])
 
+  /**
+   * Handles the caret scroll behavior based on keyboard events
+   * @param e - The keyboard event
+   */
   const handleCaretScroll = useCallback(
     (e: KeyboardEvent) => {
       if (!divRef.current) return
@@ -136,6 +151,10 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
     }
   }
 
+  /**
+   * Inserts the specified text at the current caret position in the contentEditable element
+   * @param text - The text to be inserted
+   */
   function insertTextAtCaret(text: string) {
     if (!divRef.current) return
     const currentCaretPos = getCaretPosition(divRef.current)
@@ -152,6 +171,13 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
 
   // Note: setSelectionRange and createTextRange are not supported by contenteditable elements
 
+  /**
+   * Sets the caret position within the contentEditable element
+   * If the element is empty, it will be focused
+   *
+   * @param elem - The contentEditable element
+   * @param pos - The position to set the caret to
+   */
   function setCaretPosition(elem: HTMLElement, pos: number) {
     // Create a new range
     const range = document.createRange()
@@ -178,6 +204,11 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
     }
   }
 
+  /**
+   * Retrieves the caret position within the contentEditable element
+   * @param editableDiv - The contentEditable element
+   * @returns The caret position as a number
+   */
   function getCaretPosition(editableDiv: HTMLElement) {
     let caretPos = 0,
       range
@@ -207,7 +238,6 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
   function handleKeyDown(e: React.KeyboardEvent) {
     if (onKeyDown) onKeyDown(e)
     if ((e.key === "Delete" || e.key === "Backspace") && isAllTextSelected()) {
-      console.log("delete all", isAllTextSelected())
       e.preventDefault()
       if (divRef.current) {
         divRef.current.innerText = ""
@@ -237,13 +267,7 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
   return (
     <div
       className={containerClassName}
-      style={{
-        display: "flex",
-        justifyContent: "flex-start",
-        alignItems: "center",
-        width: "calc(100% - 32px)",
-        padding: "0 16px",
-      }}
+      style={{ display: "flex", alignItems: "center" }}
     >
       <div
         ref={divRef}
@@ -255,15 +279,9 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
         aria-label={placeholder ?? ""}
         className={contentEditableClassName}
         style={{
-          width: "100%",
-          border: "1px solid #ccc",
-          borderRadius: "0.35rem",
           padding: "calc((1.5rem * 1.3125)/2) 0 calc((1.5rem * 1.3125)/2) 1rem",
-          minHeight: "19px",
-          maxHeight: "160px",
           overflow: "auto",
           height: "auto",
-          lineHeight: 1.3,
           textAlign: "initial",
           wordBreak: "break-word",
           unicodeBidi: "plaintext",
@@ -297,10 +315,8 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
           className={placeholderClassName}
           style={{
             position: "absolute",
-            color: "#a2acb4",
             pointerEvents: "none",
             textAlign: "initial",
-            marginLeft: "1rem",
           }}
         >
           {placeholder ?? ""}
