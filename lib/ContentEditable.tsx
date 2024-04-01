@@ -33,8 +33,9 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
   const divRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    if (updatedContent) {
+    if (updatedContent !== null && updatedContent !== undefined) {
       setContent(updatedContent)
+      if (divRef.current) divRef.current.innerText = updatedContent
       if (onContentExternalUpdate) onContentExternalUpdate(updatedContent)
     }
   }, [updatedContent, onContentExternalUpdate])

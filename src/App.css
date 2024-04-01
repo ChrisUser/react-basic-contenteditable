@@ -1,14 +1,45 @@
-.main-container {
-  padding: 3rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 .full-width {
   width: 100%;
 }
+.falsy {
+  color: red;
+}
+.truthy {
+  color: green;
+}
+
+.main-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+.message-history-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 2rem 0;
+  flex: 1;
+  overflow: auto;
+  max-height: 75vh;
+}
+.message-item {
+  display: flex;
+  align-self: flex-start;
+  padding: 0.85rem 1rem;
+  border-radius: 0.35rem;
+  background-color: #eff1f6;
+  letter-spacing: 0.05ch;
+  line-height: 1.2;
+  white-space: pre-wrap;
+}
+.message-history-container,
 .input-container {
-  padding: 0 1rem;
+  padding: 0 3rem;
+}
+
+.input-container {
   position: relative;
 }
 .input-element {
@@ -21,4 +52,38 @@
 .input-placeholder {
   color: #a2acb4;
   margin-left: 1rem;
+}
+
+.metrics-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin: 2rem -3rem 0;
+  font-size: 0.875rem;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+  border-top: 1px solid #0b57d0;
+  background-color: #e0e8f6;
+  padding: 2rem 3rem;
+}
+.metrics-section__left-box {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+button {
+  cursor: pointer;
+  appearance: none;
+  border: none;
+  background-color: #2f6ed3;
+  color: white;
+  padding: 0.875rem 1rem;
+  border-radius: 0.35rem;
+  letter-spacing: 0.08ch;
+}
+button:hover {
+  background-color: #1f4aa8;
 }
