@@ -1,7 +1,7 @@
 {
   "name": "react-basic-contenteditable",
-  "private": true,
-  "version": "1.0.0",
+  "description": "React 18 contenteditable component. Super-customizable!",
+  "version": "1.0.1",
   "type": "module",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
@@ -11,6 +11,22 @@
   "sideEffects": [
     "**/*.css"
   ],
+  "author": "ChrisUser (https://github.com/ChrisUser)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ChrisUser/react-basic-contenteditable.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "contenteditable",
+    "chat-component"
+  ],
+  "release": {
+    "branches": [
+      "main"
+    ]
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc --p ./tsconfig-build.json && vite build",
@@ -37,5 +53,9 @@
     "typescript": "^5.2.2",
     "vite": "^5.1.0",
     "vite-plugin-dts": "^3.7.2"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/ChrisUser/react-basic-contenteditable/issues"
+  },
+  "homepage": "https://github.com/ChrisUser/react-basic-contenteditable#readme"
 }
