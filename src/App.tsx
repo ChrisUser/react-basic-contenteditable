@@ -2,7 +2,7 @@ import ContentEditable from "../lib/ContentEditable"
 import "./App.css"
 import { useEffect, useState } from "react"
 
-function App() {
+const App = () => {
   const [emptyContent, setEmptyContent] = useState<string | undefined>(
     undefined
   )
