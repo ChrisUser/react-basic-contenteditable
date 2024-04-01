@@ -18,13 +18,11 @@ or yarn
 yarn add react-basic-contenteditable
 ```
 
-<br>
-
 ## Usage
 
 Live **demo** at: [https://chrisuser.github.io/react-basic-contenteditable/](https://chrisuser.github.io/react-basic-contenteditable/)
 
-## Example
+### Example
 
 ```javascript
 import ContentEditable from "react-basic-contenteditable"
@@ -49,7 +47,7 @@ const App = () => {
 export default App
 ```
 
-## Props
+### Props
 
 > All props except `onChange` are optional.
 
@@ -62,20 +60,16 @@ export default App
 | disabled                 | ✔️       | `boolean`           | Flag that disables the input element                                  |
 | updatedContent           | ✔️       | `string`            | Text injected from parent element into the input as the current value |
 | onContentExternalUpdate  | ✔️       | `(content) => void` | Method that emits the injected content by the `updatedContent` prop   |
-| onChange                 | ❌       | `(content) => {}`   | Method that emits the current content as a string                     |
+| onChange                 | ❌       | `(content) => void` | Method that emits the current content as a string                     |
 | onKeyUp                  | ✔️       | `(e) => void`       | Method that emits the keyUp keyboard event                            |
 | onKeyDown                | ✔️       | `(e) => void`       | Method that emits the keyDown keyboard event                          |
 | onFocus                  | ✔️       | `(e) => void`       | Method that emits the focus event                                     |
 | onBlur                   | ✔️       | `(e) => void`       | Method that emits the blur event                                      |
 
-<br>
-
 ## Contribution
 
 If you have a suggestion that would make this component better feel free to fork the project and open a pull request or create an issue for any idea or bug you find.\
 Remeber to follow the [Contributing Guidelines](https://github.com/ChrisUser/.github/blob/main/CONTRIBUTING.md).
-
-<br>
 
 ## Licence
 
