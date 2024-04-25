@@ -1,7 +1,7 @@
 name: Docs build and deploy
 on:
-  push:
-    paths: ["src/**"] # Trigger the action only when files change in the folders defined here
+  push
+  # paths: ["src/**"] # Trigger the action only when files change in the folders defined here
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
