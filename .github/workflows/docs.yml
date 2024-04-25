@@ -1,0 +1,30 @@
+name: Build and Deploy
+on:
+  push:
+    paths: ["src/**"] # Trigger the action only when files change in the folders defined here
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+      - name: Install and Build 🔧
+        run: | # Install packages and build the demo project
+          yarn install
+          yarn build-docs
+      - name: Get commit info
+        shell: bash
+        run: |
+          echo "sha_short=$(git rev-parse --short "$GITHUB_SHA")" >> "$GITHUB_ENV"
+      - name: Deploy 🚀
+        uses: crazy-max/ghaction-github-pages@v3
+        with:
+          target_branch: docs
+          build_dir: docs
+          commit_message: "Deploying to docs from ${{ env.sha_short }}"
+          keep_history: false
+          jekyll: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
