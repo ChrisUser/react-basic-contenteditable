@@ -9,7 +9,7 @@ import dts from "vite-plugin-dts"
 export default defineConfig(({ mode }) => {
   if (mode === "docs") {
     return {
-      plugins: [react(), dts({ exclude: ["lib"] })],
+      // plugins: [react(), dts({ exclude: ["lib"] })],
       build: { outDir: "docs" },
       /* build: {
         rollupOptions: {
