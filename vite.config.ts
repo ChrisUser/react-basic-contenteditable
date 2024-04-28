@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => {
     return {
       // plugins: [react(), dts({ exclude: ["lib"] })],
       build: { outDir: "docs" },
+      base: "/react-basic-contenteditable/",
       /* build: {
         rollupOptions: {
           external: ["react", "react/jsx-runtime"],
