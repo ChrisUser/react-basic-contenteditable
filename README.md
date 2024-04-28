@@ -20,7 +20,7 @@ yarn add react-basic-contenteditable
 
 ## Usage
 
-<!-- Live **demo** at: [https://chrisuser.github.io/react-basic-contenteditable/](https://chrisuser.github.io/react-basic-contenteditable/) -->
+Live **demo** at [https://chrisuser.github.io/react-basic-contenteditable/](https://chrisuser.github.io/react-basic-contenteditable/)
 
 ### Example
 
