@@ -7,7 +7,7 @@ interface ContentEditableProps {
   placeholder?: string
   disabled?: boolean
   updatedContent?: string
-  onChange: (content: string) => void
+  onChange?: (content: string) => void
   onKeyUp?: (e: React.KeyboardEvent) => void
   onKeyDown?: (e: React.KeyboardEvent) => void
   onFocus?: (e: React.FocusEvent) => void
@@ -43,7 +43,7 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
   useEffect(() => {
     if (divRef.current) {
       divRef.current.style.height = "auto"
-      onChange(content)
+      if (onChange) onChange(content)
     }
   }, [content, onChange])
 

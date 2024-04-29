@@ -59,7 +59,10 @@ const App = () => {
       <div className="full-width metrics-section">
         <div className="metrics-section__left-box">
           <div>
-            Content: <b>{truncateString(content, 200)}</b>
+            Content:{" "}
+            <b className="current-message-text">
+              {truncateString(content, 200)}
+            </b>
           </div>
           <div>
             Is focused:{" "}

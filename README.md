@@ -49,7 +49,7 @@ export default App
 
 ### Props
 
-> All props except `onChange` are optional.
+> All props are optional, that's how you can **fully customize** it!
 
 | Name                     | Optional | Type                | Description                                                           |
 | ------------------------ | -------- | ------------------- | --------------------------------------------------------------------- |
@@ -60,7 +60,7 @@ export default App
 | disabled                 | ✔️       | `boolean`           | Flag that disables the input element                                  |
 | updatedContent           | ✔️       | `string`            | Text injected from parent element into the input as the current value |
 | onContentExternalUpdate  | ✔️       | `(content) => void` | Method that emits the injected content by the `updatedContent` prop   |
-| onChange                 | ❌       | `(content) => void` | Method that emits the current content as a string                     |
+| onChange                 | ✔️       | `(content) => void` | Method that emits the current content as a string                     |
 | onKeyUp                  | ✔️       | `(e) => void`       | Method that emits the keyUp keyboard event                            |
 | onKeyDown                | ✔️       | `(e) => void`       | Method that emits the keyDown keyboard event                          |
 | onFocus                  | ✔️       | `(e) => void`       | Method that emits the focus event                                     |
