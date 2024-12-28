@@ -13,7 +13,6 @@ jobs:
         with:
           persist-credentials: false
       - name: Install and Build 🔧
-        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           check-latest: true
