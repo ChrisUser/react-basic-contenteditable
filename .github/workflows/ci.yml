@@ -7,15 +7,15 @@ on:
     branches: [main]
 
 env:
-  NODE_VERSION: "18"
+  NODE_VERSION: "20"
 
 jobs:
   full-code-check:
     runs-on: ubuntu-latest
     steps:
       - name: Full-check repository
-        uses: actions/checkout@v3
-      - uses: actions/setup-node@v2.5.1
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
           check-latest: true
