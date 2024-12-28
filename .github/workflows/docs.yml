@@ -1,7 +1,9 @@
 name: Docs build and deploy
-on:
-  push
-  # paths: ["src/**"] # Trigger the action only when files change in the folders defined here
+on: push
+
+env:
+  NODE_VERSION: "20"
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -10,6 +12,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - name: Setup Node.js 📦
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          check-latest: true
       - name: Install and Build 🔧
         run: | # Install packages and build the demo project
           yarn install
