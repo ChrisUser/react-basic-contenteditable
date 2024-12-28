@@ -268,7 +268,7 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
   return (
     <div
       className={containerClassName}
-      style={{ display: "flex", alignItems: "center" }}
+      style={{ display: "flex", alignItems: "center", position: "relative" }}
     >
       <div
         ref={divRef}
@@ -280,7 +280,7 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
         aria-label={placeholder ?? ""}
         className={contentEditableClassName}
         style={{
-          padding: "calc((1.5rem * 1.3125)/2) 0 calc((1.5rem * 1.3125)/2) 1rem",
+          padding: "0.85rem",
           overflow: "auto",
           height: "auto",
           textAlign: "initial",

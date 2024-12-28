@@ -1,7 +1,7 @@
 import { defineConfig } from "vite"
 import { extname, relative, resolve } from "path"
 import { fileURLToPath } from "node:url"
-import glob from "glob"
+import { glob } from "glob"
 import react from "@vitejs/plugin-react-swc"
 import dts from "vite-plugin-dts"
 
