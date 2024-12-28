@@ -11,7 +11,7 @@ env:
 
 jobs:
   full-code-check:
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
     steps:
       - name: Full-check repository
         uses: actions/checkout@v4
