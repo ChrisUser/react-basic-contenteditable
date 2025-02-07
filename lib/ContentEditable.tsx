@@ -4,9 +4,11 @@ interface ContentEditableProps {
   containerClassName?: string
   contentEditableClassName?: string
   placeholderClassName?: string
+  charsCounterClassName?: string
   placeholder?: string
   disabled?: boolean
   updatedContent?: string
+  maxLength?: number
   onChange?: (content: string) => void
   onKeyUp?: (e: React.KeyboardEvent) => void
   onKeyDown?: (e: React.KeyboardEvent) => void
@@ -15,13 +17,24 @@ interface ContentEditableProps {
   onContentExternalUpdate?: (content: string) => void
 }
 
+// Helper function to check if content length is within maxLength
+const isContentWithinMaxLength = (
+  content: string,
+  maxLength?: number
+): boolean => {
+  if (!maxLength) return true
+  return content.length <= maxLength
+}
+
 const ContentEditable: React.FC<ContentEditableProps> = ({
   containerClassName,
   contentEditableClassName,
   placeholderClassName,
+  charsCounterClassName,
   placeholder,
   disabled,
   updatedContent,
+  maxLength,
   onChange,
   onKeyUp,
   onKeyDown,
@@ -43,9 +56,11 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
   useEffect(() => {
     if (divRef.current) {
       divRef.current.style.height = "auto"
-      if (onChange) onChange(content)
+      if (onChange && isContentWithinMaxLength(content, maxLength)) {
+        onChange(content)
+      }
     }
-  }, [content, onChange])
+  }, [content, onChange, maxLength])
 
   /**
    * Checks if the caret is on the last line of a contenteditable element
@@ -125,30 +140,40 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
     const clipboardData = e.clipboardData || (window as any).clipboardData
     const plainText = clipboardData.getData("text/plain")
 
-    // Get the current selection
+    // Get the current selection and current content
     const sel: Selection | null = window.getSelection()
+    const currentContent = divRef.current?.innerText || ""
+
     if (sel && sel.rangeCount) {
-      // Get the first range of the selection
       const range = sel.getRangeAt(0)
+      const selectedText = range.toString()
 
-      // Delete the contents of the range (this is the selected text)
-      range.deleteContents()
+      // Calculate how much text we can insert
+      const availableSpace = maxLength
+        ? maxLength - (currentContent.length - selectedText.length)
+        : plainText.length
+      const truncatedText = plainText.slice(0, availableSpace)
 
-      // Create a new text node containing the pasted text
-      const textNode = document.createTextNode(plainText)
+      if (truncatedText.length > 0) {
+        range.deleteContents()
+        const textNode = document.createTextNode(truncatedText)
+        range.insertNode(textNode)
+        range.setStartAfter(textNode)
+        sel.removeAllRanges()
+        sel.addRange(range)
 
-      // Insert the text node into the range, which will replace the selected text
-      range.insertNode(textNode)
-
-      // Move the caret to the end of the new text
-      range.setStartAfter(textNode)
-      sel.removeAllRanges()
-      sel.addRange(range)
-
-      setContent(divRef.current?.innerText ?? "")
+        setContent(divRef.current?.innerText ?? "")
+      }
     } else {
-      // If there's no selection, just insert the text at the current caret position
-      insertTextAtCaret(plainText)
+      // If there isn't a selection, check if we can insert at current position
+      const availableSpace = maxLength
+        ? maxLength - currentContent.length
+        : plainText.length
+      const truncatedText = plainText.slice(0, availableSpace)
+
+      if (truncatedText.length > 0) {
+        insertTextAtCaret(truncatedText)
+      }
     }
   }
 
@@ -202,6 +227,21 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
     } else {
       // If the div is empty, focus it
       elem.focus()
+    }
+  }
+
+  /**
+   * Sets the caret (text cursor) position at the end of the specified contenteditable element
+   * @param editableDiv - The HTMLElement representing the contenteditable div where the caret should be placed
+   */
+  function setCaretAtTheEnd(editableDiv: HTMLElement) {
+    const range = document.createRange()
+    const sel = window.getSelection()
+    if (editableDiv.lastChild && sel) {
+      range.setStartAfter(editableDiv.lastChild)
+      range.collapse(true)
+      sel.removeAllRanges()
+      sel.addRange(range)
     }
   }
 
@@ -288,8 +328,18 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
           unicodeBidi: "plaintext",
         }}
         onInput={(e: React.FormEvent<HTMLDivElement>) => {
-          if (disabled) return
-          setContent(e.currentTarget.innerText)
+          const currentContent = e.currentTarget.innerText
+          if (
+            disabled ||
+            !isContentWithinMaxLength(currentContent, maxLength)
+          ) {
+            if (divRef.current) {
+              divRef.current.innerText = content
+              setCaretAtTheEnd(divRef.current)
+            }
+            return
+          }
+          setContent(currentContent)
         }}
         onPaste={(e) => {
           if (disabled) return
@@ -321,6 +371,17 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
           }}
         >
           {placeholder ?? ""}
+        </span>
+      )}
+      {!!maxLength && (
+        <span
+          dir="auto"
+          className={charsCounterClassName}
+          style={{
+            marginLeft: "1rem",
+          }}
+        >
+          {`${content.length ?? 0}/${maxLength}`}
         </span>
       )}
     </div>
