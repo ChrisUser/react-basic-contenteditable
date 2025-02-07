@@ -45,6 +45,7 @@ const App = () => {
         placeholderClassName="input-placeholder"
         updatedContent={emptyContent}
         onChange={(content) => setContent(content)}
+        maxLength={100}
         onFocus={() => {
           setIsFocused(true)
           setIsBlurred(false)
