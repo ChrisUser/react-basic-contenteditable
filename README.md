@@ -51,20 +51,22 @@ export default App
 
 > All props are optional, that's how you can **fully customize** it!
 
-| Name                     | Optional | Type                | Description                                                           |
-| ------------------------ | -------- | ------------------- | --------------------------------------------------------------------- |
-| containerClassName       | ✔️       | `string`            | Custom classes for the wrapper div                                    |
-| contentEditableClassName | ✔️       | `string`            | Custom classes for the input element                                  |
-| placeholderClassName     | ✔️       | `string`            | Custom classes for the placeholder text                               |
-| placeholder              | ✔️       | `string`            | Input placeholder text                                                |
-| disabled                 | ✔️       | `boolean`           | Flag that disables the input element                                  |
-| updatedContent           | ✔️       | `string`            | Text injected from parent element into the input as the current value |
-| onContentExternalUpdate  | ✔️       | `(content) => void` | Method that emits the injected content by the `updatedContent` prop   |
-| onChange                 | ✔️       | `(content) => void` | Method that emits the current content as a string                     |
-| onKeyUp                  | ✔️       | `(e) => void`       | Method that emits the keyUp keyboard event                            |
-| onKeyDown                | ✔️       | `(e) => void`       | Method that emits the keyDown keyboard event                          |
-| onFocus                  | ✔️       | `(e) => void`       | Method that emits the focus event                                     |
-| onBlur                   | ✔️       | `(e) => void`       | Method that emits the blur event                                      |
+| Name                     | Optional | Type                | Description                                                                 |
+| ------------------------ | -------- | ------------------- | --------------------------------------------------------------------------- |
+| containerClassName       | ✔️       | `string`            | Custom classes for the wrapper div                                          |
+| contentEditableClassName | ✔️       | `string`            | Custom classes for the input element                                        |
+| placeholderClassName     | ✔️       | `string`            | Custom classes for the placeholder text                                     |
+| charsCounterClassName    | ✔️       | `string`            | Custom classes for the character counter text (if `maxLength` is specified) |
+| placeholder              | ✔️       | `string`            | Input placeholder text                                                      |
+| disabled                 | ✔️       | `boolean`           | Flag that disables the input element                                        |
+| maxLength                | ✔️       | `number`            | Indicates the maximum number of characters a user can enter                 |
+| updatedContent           | ✔️       | `string`            | Text injected from parent element into the input as the current value       |
+| onContentExternalUpdate  | ✔️       | `(content) => void` | Method that emits the injected content by the `updatedContent` prop         |
+| onChange                 | ✔️       | `(content) => void` | Method that emits the current content as a string                           |
+| onKeyUp                  | ✔️       | `(e) => void`       | Method that emits the keyUp keyboard event                                  |
+| onKeyDown                | ✔️       | `(e) => void`       | Method that emits the keyDown keyboard event                                |
+| onFocus                  | ✔️       | `(e) => void`       | Method that emits the focus event                                           |
+| onBlur                   | ✔️       | `(e) => void`       | Method that emits the blur event                                            |
 
 ## Contribution
 
