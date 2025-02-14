@@ -278,12 +278,18 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
 
   function handleKeyDown(e: React.KeyboardEvent) {
     if (onKeyDown) onKeyDown(e)
-    if ((e.key === "Delete" || e.key === "Backspace") && isAllTextSelected()) {
+    if (!divRef.current) return
+    if (
+      (["Delete", "Backspace"].includes(e.key) && isAllTextSelected()) ||
+      (e.key === "Backspace" && content.length === 1) ||
+      (e.key === "Delete" &&
+        getCaretPosition(divRef.current) === 0 &&
+        content.length === 1)
+    ) {
       e.preventDefault()
-      if (divRef.current) {
-        divRef.current.innerText = ""
-        setContent("")
-      }
+
+      divRef.current.innerText = ""
+      setContent("")
     }
   }
 
