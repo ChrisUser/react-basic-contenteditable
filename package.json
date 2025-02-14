@@ -1,7 +1,7 @@
 {
   "name": "react-basic-contenteditable",
   "description": "React contenteditable component. Super-customizable!",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
