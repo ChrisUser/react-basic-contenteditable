@@ -60,6 +60,7 @@ export default App
 | placeholder              | ✔️       | `string`            | Input placeholder text                                                      |
 | disabled                 | ✔️       | `boolean`           | Flag that disables the input element                                        |
 | maxLength                | ✔️       | `number`            | Indicates the maximum number of characters a user can enter                 |
+| autoFocus                | ✔️       | `boolean`           | Flag to automatically focus the input element on mount                      |
 | updatedContent           | ✔️       | `string`            | Text injected from parent element into the input as the current value       |
 | onContentExternalUpdate  | ✔️       | `(content) => void` | Method that emits the injected content by the `updatedContent` prop         |
 | onChange                 | ✔️       | `(content) => void` | Method that emits the current content as a string                           |
