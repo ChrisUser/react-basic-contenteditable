@@ -46,6 +46,7 @@ const App = () => {
         updatedContent={emptyContent}
         onChange={(content) => setContent(content)}
         maxLength={100}
+        autoFocus
         onFocus={() => {
           setIsFocused(true)
           setIsBlurred(false)

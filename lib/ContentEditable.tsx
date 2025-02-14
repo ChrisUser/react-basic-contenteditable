@@ -9,6 +9,7 @@ interface ContentEditableProps {
   disabled?: boolean
   updatedContent?: string
   maxLength?: number
+  autoFocus?: boolean
   onChange?: (content: string) => void
   onKeyUp?: (e: React.KeyboardEvent) => void
   onKeyDown?: (e: React.KeyboardEvent) => void
@@ -35,6 +36,7 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
   disabled,
   updatedContent,
   maxLength,
+  autoFocus,
   onChange,
   onKeyUp,
   onKeyDown,
@@ -61,6 +63,12 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
       }
     }
   }, [content, onChange, maxLength])
+
+  useEffect(() => {
+    if (divRef.current && autoFocus) {
+      divRef.current.focus()
+    }
+  }, [autoFocus])
 
   /**
    * Checks if the caret is on the last line of a contenteditable element
