@@ -46,6 +46,8 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
 }) => {
   const [content, setContent] = useState("")
   const divRef = useRef<HTMLDivElement | null>(null)
+  const undoStack = useRef<string[]>([])
+  const redoStack = useRef<string[]>([])
 
   useEffect(() => {
     if (updatedContent !== null && updatedContent !== undefined) {
@@ -69,6 +71,60 @@ const ContentEditable: React.FC<ContentEditableProps> = ({
       divRef.current.focus()
     }
   }, [autoFocus])
+
+  useEffect(() => {
+    undoStack.current.push(content)
+  }, [content])
+
+  /**
+   * Handles undo and redo keyboard shortcuts for content editable div.
+   * - Undo with `Ctrl + Z`
+   * - Redo with `Ctrl + Y` or `Ctrl + Shift + Z`
+   *
+   * Prevents the default action.
+   * Pops the last content from the undo/redo stack and pushes it to the redo/undo stack.
+   * Sets the content to the previous state and updates
+   * the content of the div and sets the caret at the end.
+   */
+  const handleUndoRedo = useCallback(
+    (e: KeyboardEvent) => {
+      // Undo
+      if (e.ctrlKey && e.key === "z") {
+        e.preventDefault()
+        if (undoStack.current.length > 1) {
+          redoStack.current.push(undoStack.current.pop() as string)
+          const previousContent =
+            undoStack.current[undoStack.current.length - 1]
+          setContent(previousContent)
+          if (divRef.current) {
+            divRef.current.innerText = previousContent
+            setCaretAtTheEnd(divRef.current)
+          }
+        }
+        // Redo
+      } else if (
+        (e.ctrlKey && e.key === "y") ||
+        (e.ctrlKey && e.shiftKey && e.key === "Z")
+      ) {
+        e.preventDefault()
+        if (redoStack.current.length > 0) {
+          const nextContent = redoStack.current.pop() as string
+          undoStack.current.push(nextContent)
+          setContent(nextContent)
+          if (divRef.current) {
+            divRef.current.innerText = nextContent
+            setCaretAtTheEnd(divRef.current)
+          }
+        }
+      }
+    },
+    [setContent]
+  )
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleUndoRedo)
+    return () => document.removeEventListener("keydown", handleUndoRedo)
+  }, [handleUndoRedo])
 
   /**
    * Checks if the caret is on the last line of a contenteditable element

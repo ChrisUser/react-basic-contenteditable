@@ -69,6 +69,11 @@ export default App
 | onFocus                  | ✔️       | `(e) => void`       | Method that emits the focus event                                           |
 | onBlur                   | ✔️       | `(e) => void`       | Method that emits the blur event                                            |
 
+### Keyboard shortcuts
+
+- Undo: `Ctrl + Z`
+- Redo: `Ctrl + Y` / `Ctrl + Shift + Z`
+
 ## Contribution
 
 If you have a suggestion that would make this component better feel free to fork the project and open a pull request or create an issue for any idea or bug you find.\
