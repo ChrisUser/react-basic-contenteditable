@@ -9,24 +9,8 @@ import dts from "vite-plugin-dts"
 export default defineConfig(({ mode }) => {
   if (mode === "docs") {
     return {
-      // plugins: [react(), dts({ exclude: ["lib"] })],
       build: { outDir: "docs" },
       base: "/react-basic-contenteditable/",
-      /* build: {
-        rollupOptions: {
-          external: ["react", "react/jsx-runtime"],
-          input: resolve(__dirname, "index.html"),
-          output: {
-            dir: resolve(__dirname, "docs"),
-            // assetFileNames: '[name][extname]',
-            assetFileNames: (assetInfo) => {
-              const assetName = assetInfo.name?.split(".").at(0)
-              return `${assetName === "style" ? "index" : "[name]"}[extname]`
-            },
-            entryFileNames: "[name].js",
-          },
-        },
-      },*/
     }
   }
   if (mode === "production") {
@@ -38,23 +22,17 @@ export default defineConfig(({ mode }) => {
           formats: ["es"],
         },
         rollupOptions: {
-          external: ["react", "react/jsx-runtime"],
+          external: ["react", "react/jsx-runtime", "react-dom"],
           input: Object.fromEntries(
-            // https://rollupjs.org/configuration-options/#input
             glob.sync("lib/**/*.{ts,tsx}").map((file) => [
-              // 1. The name of the entry point
-              // lib/nested/foo.js becomes nested/foo
               relative(
                 "lib",
                 file.slice(0, file.length - extname(file).length)
               ),
-              // 2. The absolute path to the entry file
-              // lib/nested/foo.ts becomes /project/lib/nested/foo.ts
               fileURLToPath(new URL(file, import.meta.url)),
             ])
           ),
           output: {
-            // assetFileNames: '[name][extname]',
             assetFileNames: (assetInfo) => {
               const assetName = assetInfo.name?.split(".").at(0)
               return `${assetName === "style" ? "index" : "[name]"}[extname]`
