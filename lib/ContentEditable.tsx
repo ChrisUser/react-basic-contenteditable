@@ -110,6 +110,7 @@ const ContentEditable = forwardRef<ContentEditableHandle, ContentEditableProps>(
         if (!divRef.current) return
         divRef.current.innerText = ""
         setContent("")
+        fireOnChange("", 0)
       },
       getCaretPosition: () => {
         if (!divRef.current) return 0
@@ -120,20 +121,13 @@ const ContentEditable = forwardRef<ContentEditableHandle, ContentEditableProps>(
 
     useEffect(() => {
       if (updatedContent !== null && updatedContent !== undefined) {
-        setContent(updatedContent)
-        if (divRef.current) divRef.current.innerText = updatedContent
+        setContent((prev) => prev === updatedContent ? prev : updatedContent)
+        if (divRef.current && divRef.current.innerText !== updatedContent) {
+          divRef.current.innerText = updatedContent
+        }
         if (onContentExternalUpdate) onContentExternalUpdate(updatedContent)
       }
     }, [updatedContent, onContentExternalUpdate])
-
-    useEffect(() => {
-      if (divRef.current) {
-        divRef.current.style.height = "auto"
-        if (onChange && isContentWithinMaxLength(content, maxLength)) {
-          onChange(content, { caretPosition: lastCaretPosition.current })
-        }
-      }
-    }, [content, onChange, maxLength])
 
     useEffect(() => {
       if (divRef.current && autoFocus) {
@@ -156,6 +150,12 @@ const ContentEditable = forwardRef<ContentEditableHandle, ContentEditableProps>(
     }, [disabled])
 
     // --- Helper functions ---
+
+    function fireOnChange(newContent: string, caretPos?: number) {
+      if (onChange && isContentWithinMaxLength(newContent, maxLength)) {
+        onChange(newContent, { caretPosition: caretPos ?? lastCaretPosition.current })
+      }
+    }
 
     function getCaretPositionFromElement(editableDiv: HTMLElement): number {
       const sel = window.getSelection()
@@ -235,6 +235,7 @@ const ContentEditable = forwardRef<ContentEditableHandle, ContentEditableProps>(
 
       const newPos = currentCaretPos + text.length
       lastCaretPosition.current = newPos
+      fireOnChange(divRef.current.innerText, newPos)
     }
 
     function isCaretOnLastLine(element: HTMLElement): boolean {
@@ -312,6 +313,7 @@ const ContentEditable = forwardRef<ContentEditableHandle, ContentEditableProps>(
             const pos = getCaretPositionFromElement(divRef.current)
             if (pos >= 0) lastCaretPosition.current = pos
           }
+          fireOnChange(newContent)
         }
       } else {
         const availableSpace = maxLength
@@ -358,6 +360,7 @@ const ContentEditable = forwardRef<ContentEditableHandle, ContentEditableProps>(
             divRef.current.innerText = previousContent
             setCaretAtTheEnd(divRef.current)
           }
+          fireOnChange(previousContent)
         }
         return
       }
@@ -376,6 +379,7 @@ const ContentEditable = forwardRef<ContentEditableHandle, ContentEditableProps>(
             divRef.current.innerText = nextContent
             setCaretAtTheEnd(divRef.current)
           }
+          fireOnChange(nextContent)
         }
         return
       }
@@ -397,6 +401,7 @@ const ContentEditable = forwardRef<ContentEditableHandle, ContentEditableProps>(
         e.preventDefault()
         divRef.current.innerText = ""
         setContent("")
+        fireOnChange("", 0)
       }
     }
 
@@ -459,6 +464,7 @@ const ContentEditable = forwardRef<ContentEditableHandle, ContentEditableProps>(
                 if (pos >= 0) lastCaretPosition.current = pos
               }
             }
+            fireOnChange(processed)
           }}
           onPaste={(e: React.ClipboardEvent<HTMLElement>) => {
             if (disabled) return
